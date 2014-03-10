@@ -14,7 +14,7 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 #USERIF_LIBS = $(TKENV_LIBS)
 
 # C++ include paths (with -I)
-INCLUDE_PATH = -I. -Iresults
+INCLUDE_PATH = -I. -Igenerators -Igenerators/message -Iresults
 
 # Additional object and library files to link with
 EXTRA_OBJS =
@@ -29,17 +29,17 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc and .msg files
 OBJS = \
-    $O/ExponentialGenerator.o \
-    $O/Generator.o \
-    $O/MMPPGenerator.o \
-    $O/OnOffGenerator.o \
-    $O/PoissonGenerator.o \
     $O/Receiver.o \
-    $O/Message_m.o
+    $O/generators/ExponentialGenerator.o \
+    $O/generators/Generator.o \
+    $O/generators/MMPPGenerator.o \
+    $O/generators/OnOffGenerator.o \
+    $O/generators/PoissonGenerator.o \
+    $O/generators/message/Message_m.o
 
 # Message files
 MSGFILES = \
-    Message.msg
+    generators/message/Message.msg
 
 #------------------------------------------------------------------------------
 
@@ -113,6 +113,8 @@ clean:
 	$(Q)-rm -rf $O
 	$(Q)-rm -f traffic traffic.exe libtraffic.so libtraffic.a libtraffic.dll libtraffic.dylib
 	$(Q)-rm -f ./*_m.cc ./*_m.h
+	$(Q)-rm -f generators/*_m.cc generators/*_m.h
+	$(Q)-rm -f generators/message/*_m.cc generators/message/*_m.h
 	$(Q)-rm -f results/*_m.cc results/*_m.h
 
 cleanall: clean
@@ -120,26 +122,26 @@ cleanall: clean
 
 depend:
 	$(qecho) Creating dependencies...
-	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc results/*.cc
+	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc generators/*.cc generators/message/*.cc results/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
-$O/ExponentialGenerator.o: ExponentialGenerator.cc \
-	Generator.h \
-	Message_m.h
-$O/Generator.o: Generator.cc \
-	Generator.h \
-	Message_m.h
-$O/MMPPGenerator.o: MMPPGenerator.cc \
-	Generator.h \
-	Message_m.h
-$O/Message_m.o: Message_m.cc \
-	Message_m.h
-$O/OnOffGenerator.o: OnOffGenerator.cc \
-	Generator.h \
-	Message_m.h
-$O/PoissonGenerator.o: PoissonGenerator.cc \
-	Generator.h \
-	Message_m.h
 $O/Receiver.o: Receiver.cc \
-	Message_m.h
+	generators/message/Message_m.h
+$O/generators/ExponentialGenerator.o: generators/ExponentialGenerator.cc \
+	generators/Generator.h \
+	generators/message/Message_m.h
+$O/generators/Generator.o: generators/Generator.cc \
+	generators/Generator.h \
+	generators/message/Message_m.h
+$O/generators/MMPPGenerator.o: generators/MMPPGenerator.cc \
+	generators/Generator.h \
+	generators/message/Message_m.h
+$O/generators/OnOffGenerator.o: generators/OnOffGenerator.cc \
+	generators/Generator.h \
+	generators/message/Message_m.h
+$O/generators/PoissonGenerator.o: generators/PoissonGenerator.cc \
+	generators/Generator.h \
+	generators/message/Message_m.h
+$O/generators/message/Message_m.o: generators/message/Message_m.cc \
+	generators/message/Message_m.h
 
