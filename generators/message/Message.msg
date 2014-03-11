@@ -22,5 +22,5 @@ message Message {
        int sessionId;
        int packetId;
        int priority;
-       int payload;
+       string payload;
 }

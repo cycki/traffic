@@ -35,6 +35,7 @@ class Generator : public cSimpleModule{
     double timeBetweenPackets;
     int packetDurability;
     int priority;
+    int MTU;
 };
 
 #endif /* GENERATOR_H_ */

@@ -64,10 +64,6 @@ void MMPPGenerator::handleMessage(cMessage *msg) {
 float MMPPGenerator::getCurrentStateLambda() {
     double p = uniform(0.0, 1.0);
 
-    EV << "state: " << current_state <<endl;
-    EV << "p = " << p << endl;
-    EV << "up Probability" << upProbability[current_state] << endl;
-
     if (p < upProbability[current_state]) {
         current_state++;
         current_state %= states;

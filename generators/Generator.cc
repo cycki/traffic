@@ -29,9 +29,9 @@ void Generator::initialize()
 {
     timeoutEvent = new cMessage("timeoutEvent");
     sessionDurability = par("sessionDurability");
-    packetDurability = par("packetDurability");
     timeBetweenPackets = par("timeBetweenPackets");
     priority = par("priority");
+    MTU = par("MTU");
     counter = 0;
 
     // Generate and send initial message.
@@ -51,16 +51,16 @@ Message *Generator::generateMessage()
     if (dest>=src) dest++;
 
     char msgname[20];
-    sprintf(msgname, "tic-%d-to-%d", src, dest);
+    long sessionId = counter++/sessionDurability;
+    sprintf(msgname, "tic-%d-to-%d, packetId = %ld", src, dest, sessionId);
 
     Message *msg = new Message(msgname);
-    long packetId = counter++/packetDurability;
     msg->setSrc(src);
     msg->setDst(dest);
-    msg->setSessionId(1);
-    msg->setPacketId(packetId);
+    msg->setSessionId(sessionId);
+    msg->setPacketId(counter);
     msg->setPriority(priority);
-    msg->setPayload(1246789);
+    msg->setPayload("123");
 
     return msg;
 }

@@ -1,3 +1,4 @@
+package generators;
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +20,8 @@ simple AbstractGenerator
         @display("i=block/routing");
         int sessionDurability = default(10);
         double timeBetweenPackets = default(0.1);
-        int packetDurability = default(50);
         int priority = default(1);
+        int MTU = default(1500);
     gates:
         output out;
 }
