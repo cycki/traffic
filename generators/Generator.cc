@@ -33,11 +33,6 @@ void Generator::initialize()
     priority = par("priority");
     MTU = par("MTU");
     counter = 0;
-
-    // Generate and send initial message.
-    EV << "Sending initial message\n";
-    cMessage *msg = new cMessage("initialMsg");
-    send(msg, "out");
     scheduleAt(simTime(), timeoutEvent);
 }
 

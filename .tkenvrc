@@ -1,2 +1,5 @@
 # Partial Tkenv config file -- see $HOME/.tkenvrc as well
+inspector "SchedulerTest.sch1.Ilosc plikow w kolejce Fifo" "cOutVector" "2" "418x353+26+26:normal"
+inspector "SchedulerTest" "SchedulerTest" "2" "565x342+104+104:normal"
+inspector "SchedulerTest.sch1" "FifoScheduler" "1" "460x314+99+243:iconic"
 
