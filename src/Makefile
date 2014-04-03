@@ -1,12 +1,12 @@
 #
-# OMNeT++/OMNEST Makefile for Pakietowiec
+# OMNeT++/OMNEST Makefile for traffic
 #
 # This file was generated with the command:
 #  opp_makemake -f --deep
 #
 
 # Name of target to be created (-o option)
-TARGET = Pakietowiec$(EXE_SUFFIX)
+TARGET = traffic$(EXE_SUFFIX)
 
 # User interface (uncomment one) (-u option)
 USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
@@ -138,7 +138,7 @@ msgheaders: $(MSGFILES:.msg=_m.h)
 clean:
 	$(qecho) Cleaning...
 	$(Q)-rm -rf $O
-	$(Q)-rm -f Pakietowiec Pakietowiec.exe libPakietowiec.so libPakietowiec.a libPakietowiec.dll libPakietowiec.dylib
+	$(Q)-rm -f traffic traffic.exe libtraffic.so libtraffic.a libtraffic.dll libtraffic.dylib
 	$(Q)-rm -f ./*_m.cc ./*_m.h
 	$(Q)-rm -f AdmissionControl/*_m.cc AdmissionControl/*_m.h
 	$(Q)-rm -f Generator/*_m.cc Generator/*_m.h
