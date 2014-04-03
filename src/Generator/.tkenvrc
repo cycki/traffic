@@ -1,0 +1,3 @@
+# Partial Tkenv config file -- see $HOME/.tkenvrc as well
+inspector "PacketGenerator.rec3." "cLongHistogram" "2" "386x348+26+56:normal"
+

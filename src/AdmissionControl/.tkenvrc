@@ -1,0 +1,3 @@
+# Partial Tkenv config file -- see $HOME/.tkenvrc as well
+inspector "AVG" "AVG" "2" "565x342+208+238:normal"
+

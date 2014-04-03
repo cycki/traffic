@@ -1,0 +1,3 @@
+package pakietowiec;
+
+@license(LGPL);
