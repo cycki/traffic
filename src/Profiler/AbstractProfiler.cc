@@ -32,33 +32,30 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
     } else {
         NetPacket* pck = check_and_cast<NetPacket*>(msg);
 		
-		// Pakiet pojawil sie na wejsciu, kolejkowanie pakietu, wyslanie komunikatou o zdarzeniu
+		// Pakiet pojawil sie na wejsciu
         if (!pck->isSelfMessage()) {
             inputBandwidthSum += pck->getByteLength();
-            if (canReceive()) {
+            if (canReceive()) {//jezeli jest miejsce - zakolejkowanie pakietu
                 if (queue.empty()) {
                     simtime_t processDelay = par("processDelay");
-                    scheduleAt(simTime() + processDelay, pck);
+                    scheduleAt(simTime() + processDelay, pck);//wyslanie komunikatu do siebie o zdarzeniu
                 }
                 queue.push_back(pck);
             } else {
                 EV << "Packet " << pck->getName() << " discarded.\n";
                 delete pck;
             }
-		// Pakiet przyjêty, opuszczenie kolejki, wysy³ka, powiêkszenie szerokoci wyjscia
-        } else {
+        } else {//Obsluga zdarzenia wlasnego
             simtime_t delay;
-            if (acceptPacket(pck, delay)) {
-                queue.pop_front();
-                send(pck, out);
-                outputBandwidthSum += pck->getByteLength();
-                if (!queue.empty()) {
-                    //simtime_t processDelay = par("processDelay");
-                    scheduleAt(simTime() /*+ processDelay*/, queue.front());
+            if (acceptPacket(pck, delay)) {//Akceptowanie pakietu zalezne od zastosowanego algorytmu,
+                queue.pop_front();//usuwamy zaakceptowany do wyjcia pakiet z kolejki oczekujacych
+                send(pck, "out");//wysylamy go na wyjscie
+                outputBandwidthSum += pck->getByteLength(); //aktualizacja statystyk
+                if (!queue.empty()) {//jezeli s¹ jeszcze elementy w kolejce ustawiamy zdarzenie do wyslanie pierwszego z kolejki
+                    scheduleAt(simTime(), queue.front());
                 }
-            } else {
-                //simtime_t processDelay = par("processDelay");
-                scheduleAt(simTime() + delay/* + processDelay*/, pck);
+            } else {//jezeli algorytm ksztaltujacy nie pozwolil na wyslanie pakietu
+                scheduleAt(simTime() + delay, pck);//ustawiamy zdarze z obliczonym opoznieniem
             }
         }
     }
@@ -68,7 +65,7 @@ bool AbstractProfiler::canReceive() {
     return queue.size() < maxQueueSize || !maxQueueSize;
 }
 
-// SprawdÅº przepustowoÅ›Ä‡
+// Sprawdz przepustowsc
 void AbstractProfiler::calcMeanBandwidth() {
     inputBandwidth = inputBandwidthSum / bandwidthCalcTick.dbl();
     outputBandwidth = outputBandwidthSum / bandwidthCalcTick.dbl();

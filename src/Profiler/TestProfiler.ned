@@ -47,107 +47,77 @@ simple Receiver
 
 network Profil
 {
-    @display("bgb=770,623");
+    @display("bgb=770,453");
     submodules:
 
         pss: PoissonGenerator {
             parameters:
-                @display("i=block/routing,cyan;p=74,463");
+                @display("i=block/routing,cyan;p=77,338");
         }
         pss1: PoissonGenerator {
             parameters:
-                @display("i=block/routing,cyan;p=74,313");
+                @display("i=block/routing,cyan;p=77,188");
         }
         pss2: PoissonGenerator {
             parameters:
-                @display("i=block/routing,cyan;p=74,170");
+                @display("i=block/routing,cyan;p=77,45");
         }
-        pss3: PoissonGenerator {
-            parameters:
-                @display("i=block/routing,cyan;p=74,33");
-        }
-
         expo: ExponentialGenerator {
             parameters:
-                @display("i=block/routing,red;p=35,463");
+                @display("i=block/routing,red;p=38,338");
         }
         expo1: ExponentialGenerator {
             parameters:
-                @display("i=block/routing,red;p=35,313");
+                @display("i=block/routing,red;p=38,188");
         }
         expo2: ExponentialGenerator {
             parameters:
-                @display("i=block/routing,red;p=35,170");
+                @display("i=block/routing,red;p=38,45");
         }
-        expo3: ExponentialGenerator {
-            parameters:
-                @display("i=block/routing,red;p=35,33");
-        }
-
         on: OnOffGenerator {
             parameters:
-                @display("i=block/routing,green;p=74,502");
+                @display("i=block/routing,green;p=77,377");
         }
         on1: OnOffGenerator {
             parameters:
-                @display("i=block/routing,green;p=74,352");
+                @display("i=block/routing,green;p=77,227");
         }
         on2: OnOffGenerator {
             parameters:
-                @display("i=block/routing,green;p=74,209");
+                @display("i=block/routing,green;p=77,84");
         }
-        on3: OnOffGenerator {
-            parameters:
-                @display("i=block/routing,green;p=74,72");
-        }
-
-
         mm: MMPPGenerator {
             parameters:
-                @display("i=block/routing,magenta;p=35,502");
+                @display("i=block/routing,magenta;p=38,377");
         }
         mm1: MMPPGenerator {
             parameters:
-                @display("i=block/routing,magenta;p=35,352");
+                @display("i=block/routing,magenta;p=38,227");
         }
         mm2: MMPPGenerator {
             parameters:
-                @display("i=block/routing,magenta;p=35,209");
+                @display("i=block/routing,magenta;p=38,84");
         }
-        mm3: MMPPGenerator {
-            parameters:
-                @display("i=block/routing,magenta;p=35,72");
-        }
-
         rec: Receiver {
             parameters:
-                @display("i=,gold;p=528,487");
+                @display("i=,gold;p=531,362");
         }
         rec1: Receiver {
             parameters:
-                @display("i=,gold;p=528,333");
+                @display("i=,gold;p=531,208");
         }
         rec2: Receiver {
             parameters:
-                @display("i=,gold;p=528,191");
+                @display("i=,gold;p=531,66");
         }
-        rec3: Receiver {
-            parameters:
-                @display("i=,gold;p=528,51");
-        }
-
-
         leakyBucket: LeakyBucket {
-            @display("p=246,487");
+            @display("p=249,362");
         }
         jitterControl: JitterControl {
-            @display("p=246,333");
+            @display("p=249,208");
         }
         tokenBucket: TokenBucket {
-            @display("p=246,191");
-        }
-        loadShedding: LoadShedding {
-            @display("p=246,51");
+            @display("p=249,66");
         }
 
 
@@ -170,12 +140,6 @@ network Profil
         on2.out --> tokenBucket.in++;
         mm2.out --> tokenBucket.in++;
         tokenBucket.out --> rec2.in;
-
-        expo3.out --> loadShedding.in++;
-        pss3.out --> loadShedding.in++;
-        on3.out --> loadShedding.in++;
-        mm3.out --> loadShedding.in++;
-        loadShedding.out --> rec3.in;
 
 
 }

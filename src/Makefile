@@ -17,11 +17,14 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 INCLUDE_PATH = \
     -I. \
     -IAdmissionControl \
+    -IAdmissionControl/results \
     -IGenerator \
     -INetPacket \
     -IProfiler \
+    -IProfiler/results \
     -IReceiver \
-    -IScheudler
+    -IScheudler \
+    -IScheudler/results
 
 # Additional object and library files to link with
 EXTRA_OBJS =
@@ -49,7 +52,6 @@ OBJS = \
     $O/Profiler/AbstractProfiler.o \
     $O/Profiler/JitterControl.o \
     $O/Profiler/LeakyBucket.o \
-    $O/Profiler/LoadShedding.o \
     $O/Profiler/TokenBucket.o \
     $O/Receiver/Receiver.o \
     $O/Scheudler/AbstractScheduler.o \
@@ -137,18 +139,21 @@ clean:
 	$(Q)-rm -f traffic traffic.exe libtraffic.so libtraffic.a libtraffic.dll libtraffic.dylib
 	$(Q)-rm -f ./*_m.cc ./*_m.h
 	$(Q)-rm -f AdmissionControl/*_m.cc AdmissionControl/*_m.h
+	$(Q)-rm -f AdmissionControl/results/*_m.cc AdmissionControl/results/*_m.h
 	$(Q)-rm -f Generator/*_m.cc Generator/*_m.h
 	$(Q)-rm -f NetPacket/*_m.cc NetPacket/*_m.h
 	$(Q)-rm -f Profiler/*_m.cc Profiler/*_m.h
+	$(Q)-rm -f Profiler/results/*_m.cc Profiler/results/*_m.h
 	$(Q)-rm -f Receiver/*_m.cc Receiver/*_m.h
 	$(Q)-rm -f Scheudler/*_m.cc Scheudler/*_m.h
+	$(Q)-rm -f Scheudler/results/*_m.cc Scheudler/results/*_m.h
 
 cleanall: clean
 	$(Q)-rm -rf $(PROJECT_OUTPUT_DIR)
 
 depend:
 	$(qecho) Creating dependencies...
-	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc AdmissionControl/*.cc Generator/*.cc NetPacket/*.cc Profiler/*.cc Receiver/*.cc Scheudler/*.cc
+	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc AdmissionControl/*.cc AdmissionControl/results/*.cc Generator/*.cc NetPacket/*.cc Profiler/*.cc Profiler/results/*.cc Receiver/*.cc Scheudler/*.cc Scheudler/results/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 $O/AdmissionControl/AbstractAdmissionControl.o: AdmissionControl/AbstractAdmissionControl.cc \
@@ -202,10 +207,6 @@ $O/Profiler/LeakyBucket.o: Profiler/LeakyBucket.cc \
 	NetPacket/NetPacket_m.h \
 	Profiler/AbstractProfiler.h \
 	Profiler/LeakyBucket.h
-$O/Profiler/LoadShedding.o: Profiler/LoadShedding.cc \
-	NetPacket/NetPacket_m.h \
-	Profiler/AbstractProfiler.h \
-	Profiler/LoadShedding.h
 $O/Profiler/TokenBucket.o: Profiler/TokenBucket.cc \
 	NetPacket/NetPacket_m.h \
 	Profiler/AbstractProfiler.h \
