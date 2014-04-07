@@ -51,18 +51,7 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
             if (acceptPacket(pck, delay)) {
 				// Jeśli pakiet przyjęty to 
                 queue.pop_front();
-                cGate* out = gate("out");
-                cChannel* channel = out->getChannel();
-                if (channel) {
-                    simtime_t finishTime = channel->getTransmissionFinishTime();
-                    simtime_t delay = std::max(finishTime - simTime(),
-                    SIMTIME_ZERO);
-					
-					// Opóźnij wysyłkę
-                    sendDelayed(pck, delay, out);
-                } else
-					// Wyślij
-                    send(pck, out);
+                send(pck, out);
                 outputBandwidthSum += pck->getByteLength();
                 if (!queue.empty()) {
                     //simtime_t processDelay = par("processDelay");
