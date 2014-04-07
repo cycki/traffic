@@ -31,7 +31,8 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
         }
     } else {
         NetPacket* pck = check_and_cast<NetPacket*>(msg);
-
+		
+		// Czy wiadomość do siebie
         if (!pck->isSelfMessage()) {
             inputBandwidthSum += pck->getByteLength();
             if (canReceive()) {
@@ -44,9 +45,11 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
                 EV << "Packet " << pck->getName() << " discarded.\n";
                 delete pck;
             }
+		// Czy wiadomość z zewnątrz
         } else {
             simtime_t delay;
             if (acceptPacket(pck, delay)) {
+				// Jeśli pakiet przyjęty to 
                 queue.pop_front();
                 cGate* out = gate("out");
                 cChannel* channel = out->getChannel();
@@ -54,11 +57,13 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
                     simtime_t finishTime = channel->getTransmissionFinishTime();
                     simtime_t delay = std::max(finishTime - simTime(),
                     SIMTIME_ZERO);
-
+					
+					// Opóźnij wysyłkę
                     sendDelayed(pck, delay, out);
                 } else
+					// Wyślij
                     send(pck, out);
-                    outputBandwidthSum += pck->getByteLength();
+                outputBandwidthSum += pck->getByteLength();
                 if (!queue.empty()) {
                     //simtime_t processDelay = par("processDelay");
                     scheduleAt(simTime() /*+ processDelay*/, queue.front());
@@ -75,6 +80,7 @@ bool AbstractProfiler::canReceive() {
     return queue.size() < maxQueueSize || !maxQueueSize;
 }
 
+// Sprawdź przepustowość
 void AbstractProfiler::calcMeanBandwidth() {
     inputBandwidth = inputBandwidthSum / bandwidthCalcTick.dbl();
     outputBandwidth = outputBandwidthSum / bandwidthCalcTick.dbl();

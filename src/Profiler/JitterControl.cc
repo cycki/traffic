@@ -15,10 +15,13 @@ void JitterControl::initialize()
 	WATCH(currentPacketDelay);
 }
 
+// Kontrola nad odchyleniami czasowymi
 bool JitterControl::acceptPacket(NetPacket* packet, simtime_t& delay)
 {
+	// Jeśli to ostatni przytrzymany pakiet to
 	if(packet == lastQueuedPacket)
 	{
+		// Uaktualnij sumę opóźnień
 		delay = simTime() - lastPacketSendTime;
 		packetDelaySum += delay;
         lastPacketSendTime = simTime();
@@ -34,7 +37,8 @@ bool JitterControl::acceptPacket(NetPacket* packet, simtime_t& delay)
 		packetsReceived++;
 
 		simtime_t diff = simTime() - lastPacketSendTime;
-
+		
+		// Sprawdź czy oczekiwana suma opóźnień została przekroczona, uaktualnij opóźnienia
 		delay = expectedPacketDelay * packetsReceived - packetDelaySum - diff;
 		delay = std::max(delay, SIMTIME_ZERO);
 

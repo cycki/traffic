@@ -21,11 +21,14 @@ bool TokenBucket::acceptPacket(NetPacket* packet, simtime_t& delay) {
                 tokensMax);
     lastTokenIncrement = currentTime;
 
+	// Jeśli to ostatni opóźniony pakiet
     if (packet == lastDelayedPacket)
         return true;
+	// Jeśli wielkość pakietu odpowiada ilości tokenów
     else if (packet->getByteLength() <= tokens) {
         tokens -= packet->getByteLength();
         return true;
+	// W przeciwnym wypadku pakiet zostaje opóźniony
     } else {
         lastDelayedPacket = packet;
         delay = (double) (packet->getByteLength() - tokens) / tokenIncrement;

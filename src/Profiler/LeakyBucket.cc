@@ -18,13 +18,16 @@ bool LeakyBucket::acceptPacket(NetPacket* packet, simtime_t& delay){
 		ileMozeWyciec = std::min((int32_t)(ileMozeWyciec + MAKSYMALNE_CIEKNIECIE * timeDiff.dbl()), MAKSYMALNE_CIEKNIECIE);
 	lastFlowIncrement = currentTime;
 
+	// Jeśli jest to już opóźniony pakiet
 	if(packet == lastDelayedPacket)
 		return true;
+	// Jeśli pakiet 'mieści się' w wiadrze wtedy może wyciec
 	else if(packet->getByteLength() <= ileMozeWyciec)
 	{
 		ileMozeWyciec -= packet->getByteLength();
 		return true;
 	}
+	// W przeciwnym przypadku pakiet będzie opóźniony
 	else
 	{
 		lastDelayedPacket = packet;
