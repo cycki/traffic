@@ -32,7 +32,7 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
     } else {
         NetPacket* pck = check_and_cast<NetPacket*>(msg);
 		
-		// Czy wiadomość do siebie
+		// Pakiet pojawil sie na wejsciu, kolejkowanie pakietu, wyslanie komunikatou o zdarzeniu
         if (!pck->isSelfMessage()) {
             inputBandwidthSum += pck->getByteLength();
             if (canReceive()) {
@@ -45,24 +45,12 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
                 EV << "Packet " << pck->getName() << " discarded.\n";
                 delete pck;
             }
-		// Czy wiadomość z zewnątrz
+		// Pakiet przyj�ty, opuszczenie kolejki, wysy�ka, powi�kszenie szerokoci wyjscia
         } else {
             simtime_t delay;
             if (acceptPacket(pck, delay)) {
-				// Jeśli pakiet przyjęty to 
                 queue.pop_front();
-                cGate* out = gate("out");
-                cChannel* channel = out->getChannel();
-                if (channel) {
-                    simtime_t finishTime = channel->getTransmissionFinishTime();
-                    simtime_t delay = std::max(finishTime - simTime(),
-                    SIMTIME_ZERO);
-					
-					// Opóźnij wysyłkę
-                    sendDelayed(pck, delay, out);
-                } else
-					// Wyślij
-                    send(pck, out);
+                send(pck, out);
                 outputBandwidthSum += pck->getByteLength();
                 if (!queue.empty()) {
                     //simtime_t processDelay = par("processDelay");
