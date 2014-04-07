@@ -8,7 +8,6 @@ void AbstractAdmissionControl::initialize() {
     rejectedSignal = registerSignal("rejected");
     intervalSignal = registerSignal("interval");
     bandwidthSignal = registerSignal("bandwidth");
-//    timeRequestSignal = registerSignal("timeRequest");
     timeRequestHistogram.setRange(0, 1700);
     timeRequestHistogram.setNumCells(1000);
     prevTime = 0;
@@ -19,21 +18,17 @@ void AbstractAdmissionControl::initialize() {
     scheduleAt(simTime() + 1, emitBandwidth);
 }
 
-void AbstractAdmissionControl::onCycleEnd() {
-}
-
 void AbstractAdmissionControl::handleMessage(cMessage* msg) {
     if (msg == emitBandwidth) {
         emit(bandwidthSignal, bandwidth);
         bandwidth = 0;
         scheduleAt(simTime() + 1, emitBandwidth);
     } else {
-        if (msg->isSelfMessage()) //zdarzenie cylkiczne
+        if (msg->isSelfMessage())
         {
             delete msg;
             cMessage* msg2 = new cMessage("intervalEvent");
             scheduleAt(simTime() + tick, msg2);
-            onCycleEnd(); //twoja funkcja
         } else {
             NetPacket* packet = check_and_cast<NetPacket*>(msg);
             if (acceptMsg(packet)) {

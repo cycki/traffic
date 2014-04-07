@@ -1,9 +1,19 @@
 #include "MAvgAdmissionControl.h"
 
 Define_Module(MAvgAdmissionControl)
+/*
+ Admission Control który bazuje na przwidzeniu czy dany pakiet bedzie mog³ byc poprawnie obs³uzony na podstawie
+ wartosci sredniej dotychczaowych pakietow
+
+na poczatku biore pakiety ktory weszly w ustalonym oknie czasowym
+pozniej liczymy dla nich wartosc srednia
+pozniej sprawdzany jest warunek czy jezeli zaakceptuje biezacy pakiet to zostanie przekroczona zamierzona wartosc sredniej pakietów
+
+ */
 
 void MAvgAdmissionControl::initialize()
 {
+    //Inicjalizacja abstracta
     AbstractAdmissionControl::initialize();
     timeWindow = par("timeWindow");
     samplingPeriod = par("samplingPeriod");
@@ -33,13 +43,15 @@ bool MAvgAdmissionControl::acceptMsg(NetPacket* packet)
         average /= timeWindow;
         previousTime = currentTime;
     }
-    bool ret;
-    if (ret = (average + packet->getByteLength() / timeWindow < targetAvg)) {
+    bool IsAccepted;
+    IsAccepted = (average + packet->getByteLength() / timeWindow) < targetAvg;
+
+    if (IsAccepted) {
         arrivalTimes.push_back(currentTime);
         loadRequests.push_back(packet->getByteLength());
     } else {
         EV << "pakiet przekracze wiekosc" << packet->getName() << std::endl;
     }
 
-    return ret;
+    return IsAccepted;
 }

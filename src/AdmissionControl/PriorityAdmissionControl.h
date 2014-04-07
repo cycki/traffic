@@ -5,8 +5,8 @@
 
 class PriorityAdmissionControl : public AbstractAdmissionControl {
 protected:
-    uint32_t minPriority;
-    uint32_t maxPriority;
+    uint32_t max;
+    uint32_t min;
 
     virtual void initialize();
     virtual bool acceptMsg(NetPacket* msg);

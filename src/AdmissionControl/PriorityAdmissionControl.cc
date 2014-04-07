@@ -2,18 +2,34 @@
 
 Define_Module(PriorityAdmissionControl)
 
+/*
+Kontrolujemy przyjêcia pakietów na podstawie ich priorytetów
+Pakiet wchodzi
+Jesli jest mniejszy niz maksymalny przez nas obslugiwany to przechodzi dalej
+Nastepnie sprawdzamy czy pakiet nie jest czasami mniejszy od naszego minimalnego priorytetu
+Jezeli spelnil oba warunki przechodzi AC jesli nie to trafia w nicosc.
+*/
+
+
 void PriorityAdmissionControl::initialize(){
 
+    //Inicjalizujêmy abstrakcyjne AC
     AbstractAdmissionControl::initialize();
-
-    maxPriority = par ("Maximal_priority");
-    minPriority = par ("Minimal_priority");
+    max = par ("Maximal_priority");
+    min = par ("Minimal_priority");
 
 }
 
 bool PriorityAdmissionControl::acceptMsg(NetPacket *msg){
-    uint32_t prior = msg->getPriority();
+    uint32_t currentPrior = msg->getPriority();
+    uint32_t mx = this->max;
+    uint32_t mn = this->min;
+    if (currentPrior<=mx) {//gorna granica
+        if (currentPrior>=mn) {//dolna granica
 
-    return prior<=this->maxPriority&&prior>=this->minPriority;
+                return currentPrior;
+                   }
+            }
+
 
 }

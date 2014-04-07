@@ -8,20 +8,22 @@
 
 class SessionAdmissionControl : public AbstractAdmissionControl {
 protected:
-    double timeWindow;
-    double samplingPeriod;
-    double previousTime;
-    double average;
-    double targetBandwidth;
-    int rejectedSessions;
-    int allSessions;
-    std::list<NetPacket> lastPackets;
-    std::set<int> activeSessionIds;
-    double terminationTimeout;
-    int maxBandwith;
-    virtual void initialize();
-    virtual bool acceptMsg(NetPacket* packet);
-    virtual void finish();
+     double timeWindow;
+      double samplingPeriod;
+      double previousTime;
+      double average;
+      double targetBandwidth;
+      bool blockedInCycle;
+      int rejectedSessions;
+      int allSessions;
+      std::list<NetPacket> lastPackets;
+      std::set<int> activeSessionIds;
+      std::set<int> blockedSessionIds;
+      double terminationTimeout;
+      int maxBandwith;
+      virtual void initialize();
+      virtual bool acceptMsg(NetPacket* packet);
+      virtual void finish();
 };
 
 #endif /* SESSIONADMISSIONCONTROL_H_ */

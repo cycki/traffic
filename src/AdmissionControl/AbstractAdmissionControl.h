@@ -20,7 +20,6 @@ protected:
 
 
     virtual bool acceptMsg(NetPacket* packet) = 0;
-    virtual void onCycleEnd();
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
     virtual void finish();
