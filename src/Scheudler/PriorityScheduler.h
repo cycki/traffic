@@ -20,6 +20,11 @@
 #include <queue>
 #include <vector>
 #include "AbstractScheduler.h"
+
+/**
+ * Dodaje pakiet do listy posortowanej wed³ug priorytetu pakietu
+ * Bierze pakiet z pocz¹tku kolejki
+ */
 class ComparePriority {
 public:
     bool operator()(NetPacket*& m1, NetPacket*& m2) {

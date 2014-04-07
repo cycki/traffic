@@ -19,7 +19,10 @@
 #include "AbstractScheduler.h"
 #include <vector>
 #include <queue>
-
+/**
+ * Posiada listy kolejek dla ka¿dego z wejsc.
+ * Co cykl zmienia kolejkê (wejscie) z której bierze pakiet. Puste kolejki pomija
+ */
 class RRScheduler : public AbstractScheduler{
     protected:
         virtual void initialize();

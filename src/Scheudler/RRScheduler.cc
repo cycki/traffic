@@ -1,6 +1,6 @@
 #include <RRScheduler.h>
 
-Define_Module(RRScheduler)
+Define_Module(RRScheduler);
 
 void RRScheduler::initialize() {
     AbstractScheduler::initialize();

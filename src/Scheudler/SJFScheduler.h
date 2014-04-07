@@ -19,7 +19,10 @@
 #include <omnetpp.h>
 #include <queue>
 #include "AbstractScheduler.h"
-
+/**
+ * Dodaje pakiet do listy posortowanej wed³ug d³ugosci pakietu
+ * Bierze pakiet z pocz¹tku kolejki
+ */
 class CompareSize{
 public:
     bool operator()(NetPacket*& m1, NetPacket*& m2) {

@@ -1,6 +1,6 @@
 #include "LIFO.h"
 
-Define_Module(LIFO)
+Define_Module(LIFO);
 
 void LIFO::initialize()
 {

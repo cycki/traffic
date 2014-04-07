@@ -1,6 +1,6 @@
 #include <PriorityScheduler.h>
 
-Define_Module(PriorityScheduler)
+Define_Module(PriorityScheduler);
 
 void PriorityScheduler::initialize() {
     AbstractScheduler::initialize();

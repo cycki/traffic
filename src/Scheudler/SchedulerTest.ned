@@ -16,38 +16,27 @@ simple Receiver
         input in;
 }
 
-simple Receiver2
-{
-    parameters:
-        @display("i=block/process");
-        @class(Receiver);
-    gates:
-        input in;
-}
 
 network SchedulerTest
 {
-    @display("bgb=775,1002");
+    @display("bgb=775,757");
     submodules:
 
         LIFO: LIFO {
-            @display("is=vl;p=273,199");
+            @display("is=vl;p=366,199");
         }
         FIFO: FIFO {
-            @display("is=vl;p=280,80");
+            @display("is=vl;p=366,80");
         }
 
-        WeightedRoundRobin: WRR {
-            @display("is=vl;p=273,327");
-        }
-        RoundRobin: RR {
-            @display("is=vl;p=273,466");
-        }
-        RoundRobin2: RRScheduler {
-            @display("is=vl;p=273,586");
+        RoundRobin: RRScheduler {
+            @display("is=vl;p=366,327");
         }
         PriorityScheduler: PriorityScheduler {
-            @display("is=vl;p=273,700");
+            @display("is=vl;p=366,466");
+        }
+        SJFScheduler: SJFScheduler {
+            @display("is=vl;p=366,607");
         }
 
         gen[6]: PoissonGenerator {
@@ -68,12 +57,9 @@ network SchedulerTest
         }
         gen5[6]: PoissonGenerator {
             parameters:
-                @display("i=block/departure,#FF8000;p=72,586;is=vl");
+                @display("i=block/departure,#FF8000;p=72,607;is=vl");
         }
-        gen6[6]: PoissonGenerator {
-            parameters:
-                @display("i=block/departure,#FF8000;p=72,700;is=vl");
-        }
+
         rec1: Receiver {
             parameters:
                 @display("i=block/arrival,gold;p=678,199;is=vl");
@@ -92,12 +78,9 @@ network SchedulerTest
         }
         rec5: Receiver {
             parameters:
-                @display("i=block/arrival,gold;p=678,586;is=vl");
+                @display("i=block/arrival,gold;p=678,607;is=vl");
         }
-        rec6: Receiver {
-            parameters:
-                @display("i=block/arrival,gold;p=678,700;is=vl");
-        }
+
     connections:
         gen[0].out --> LIFO.in++;
         gen[1].out --> LIFO.in++;
@@ -113,39 +96,36 @@ network SchedulerTest
         gen2[4].out --> FIFO.in++;
         gen2[5].out --> FIFO.in++;
 
-        gen3[0].out --> WeightedRoundRobin.in++;
-        gen3[1].out --> WeightedRoundRobin.in++;
-        gen3[2].out --> WeightedRoundRobin.in++;
-        gen3[3].out --> WeightedRoundRobin.in++;
-        gen3[4].out --> WeightedRoundRobin.in++;
-        gen3[5].out --> WeightedRoundRobin.in++;
 
-        gen4[0].out --> RoundRobin.in++;
-        gen4[1].out --> RoundRobin.in++;
-        gen4[2].out --> RoundRobin.in++;
-        gen4[3].out --> RoundRobin.in++;
-        gen4[4].out --> RoundRobin.in++;
-        gen4[5].out --> RoundRobin.in++;
 
-        gen5[0].out --> RoundRobin2.in++;
-        gen5[1].out --> RoundRobin2.in++;
-        gen5[2].out --> RoundRobin2.in++;
-        gen5[3].out --> RoundRobin2.in++;
-        gen5[4].out --> RoundRobin2.in++;
-        gen5[5].out --> RoundRobin2.in++;
+        gen3[0].out --> RoundRobin.in++;
+        gen3[1].out --> RoundRobin.in++;
+        gen3[2].out --> RoundRobin.in++;
+        gen3[3].out --> RoundRobin.in++;
+        gen3[4].out --> RoundRobin.in++;
+        gen3[5].out --> RoundRobin.in++;
 
-        gen6[0].out --> PriorityScheduler.in++;
-        gen6[1].out --> PriorityScheduler.in++;
-        gen6[2].out --> PriorityScheduler.in++;
-        gen6[3].out --> PriorityScheduler.in++;
-        gen6[4].out --> PriorityScheduler.in++;
-        gen6[5].out --> PriorityScheduler.in++;
+
+
+        gen4[0].out --> PriorityScheduler.in++;
+        gen4[1].out --> PriorityScheduler.in++;
+        gen4[2].out --> PriorityScheduler.in++;
+        gen4[3].out --> PriorityScheduler.in++;
+        gen4[4].out --> PriorityScheduler.in++;
+        gen4[5].out --> PriorityScheduler.in++;
+
+        gen5[0].out --> SJFScheduler.in++;
+        gen5[1].out --> SJFScheduler.in++;
+        gen5[2].out --> SJFScheduler.in++;
+        gen5[3].out --> SJFScheduler.in++;
+        gen5[4].out --> SJFScheduler.in++;
+        gen5[5].out --> SJFScheduler.in++;
+
 
 
         LIFO.out --> rec1.in;
         FIFO.out --> rec2.in;
-        WeightedRoundRobin.out --> rec3.in;
-        RoundRobin.out --> rec4.in;
-        RoundRobin2.out --> rec5.in;
-        PriorityScheduler.out --> rec6.in;
+        RoundRobin.out --> rec3.in;
+        PriorityScheduler.out --> rec4.in;
+        SJFScheduler.out --> rec5.in;
 }

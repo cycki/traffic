@@ -1,7 +1,7 @@
 #include <SJFScheduler.h>
 
 
-Define_Module(SJFScheduler)
+Define_Module(SJFScheduler);
 
 void SJFScheduler::initialize() {
     AbstractScheduler::initialize();
