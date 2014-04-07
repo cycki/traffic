@@ -3,7 +3,10 @@
 
 #include <list>
 #include "AbstractScheduler.h"
-
+/**
+ * Dodaje pakiet na koniec kolejki
+ * Bierze pakiet z konca kolejki
+ */
 class LIFO : public AbstractScheduler
 {
 

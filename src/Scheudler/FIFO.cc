@@ -1,6 +1,6 @@
 #include "FIFO.h"
 
-Define_Module(FIFO)
+Define_Module(FIFO);
 
 void FIFO::initialize()
 {
