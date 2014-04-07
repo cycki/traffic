@@ -1,8 +1,8 @@
 package pakietowiec.Profiler;
-simple LoadSheddingProfiler extends Profiler
+simple LoadShedding extends Profiler
 {
     parameters:
         int criticalBandwidth @unit("MB") = default(1MB);
         
-        @class(LoadSheddingProfiler);
+        @class(LoadShedding);
 }

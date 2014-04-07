@@ -35,40 +35,7 @@ simple MMPPGenerator extends AbstractGenerator
         string poissonLambdaP = default("");
         @class(MMPPGenerator);
 }
-simple LeakyBucket1 extends Profiler
-{
-    parameters:
-        double byteFlow @unit("B") = default(100B);
 
-        @class(LeakyBucket);
-}
-
-simple JitterControl1 extends Profiler
-{
-    parameters:
-        double expectedPacketDelay @unit("s") = default(500ms);
-
-        @signal[AveragePacketDelay](type="double");
-        @statistic[packetDelay](title="average packet delay"; source="AveragePacketDelay"; record=vector; interpolationmode="none");
-        @class(JitterControl);
-}
-
-simple LoadShedding1 extends Profiler
-{
-    parameters:
-        int criticalBandwidth @unit("MB") = default(1MB);
-
-        @class(LoadShedding);
-}
-
-simple TokenBucket1 extends Profiler
-{
-    parameters:
-        int tokensMax @unit("MB") = default(1MB);
-        int tokenIncrement @unit("KB") = default(64KB);
-
-        @class(TokenBucket);
-}
 simple Receiver
 {
     parameters:
@@ -85,130 +52,130 @@ network Profil
 
         pss: PoissonGenerator {
             parameters:
-                @display("i=block/routing,cyan;p=411,200");
+                @display("i=block/routing,cyan;p=74,463");
         }
         pss1: PoissonGenerator {
             parameters:
-                @display("i=block/routing,cyan;p=411,200");
+                @display("i=block/routing,cyan;p=74,313");
         }
         pss2: PoissonGenerator {
             parameters:
-                @display("i=block/routing,cyan;p=403,200");
+                @display("i=block/routing,cyan;p=74,170");
         }
-        POISSON: PoissonGenerator {
+        pss3: PoissonGenerator {
             parameters:
-                @display("i=block/routing,cyan;p=412,200;is=vl");
+                @display("i=block/routing,cyan;p=74,33");
         }
 
         expo: ExponentialGenerator {
             parameters:
-                @display("i=block/routing,red;p=499,200");
+                @display("i=block/routing,red;p=35,463");
         }
         expo1: ExponentialGenerator {
             parameters:
-                @display("i=block/routing,red;p=499,200");
+                @display("i=block/routing,red;p=35,313");
         }
         expo2: ExponentialGenerator {
             parameters:
-                @display("i=block/routing,red;p=499,200");
+                @display("i=block/routing,red;p=35,170");
         }
-        EXPONENTIAL: ExponentialGenerator {
+        expo3: ExponentialGenerator {
             parameters:
-                @display("i=block/routing,red;p=529,200;is=vl");
+                @display("i=block/routing,red;p=35,33");
         }
 
         on: OnOffGenerator {
             parameters:
-                @display("i=block/routing,green;p=186,200");
+                @display("i=block/routing,green;p=74,502");
         }
         on1: OnOffGenerator {
             parameters:
-                @display("i=block/routing,green;p=186,200");
+                @display("i=block/routing,green;p=74,352");
         }
         on2: OnOffGenerator {
             parameters:
-                @display("i=block/routing,green;p=186,200");
+                @display("i=block/routing,green;p=74,209");
         }
-        ON_OFF: OnOffGenerator {
+        on3: OnOffGenerator {
             parameters:
-                @display("i=block/routing,green;p=201,200;is=vl");
+                @display("i=block/routing,green;p=74,72");
         }
 
 
         mm: MMPPGenerator {
             parameters:
-                @display("i=block/routing,magenta;p=319,200");
+                @display("i=block/routing,magenta;p=35,502");
         }
         mm1: MMPPGenerator {
             parameters:
-                @display("i=block/routing,magenta;p=319,200");
+                @display("i=block/routing,magenta;p=35,352");
         }
         mm2: MMPPGenerator {
             parameters:
-                @display("i=block/routing,magenta;p=319,200");
+                @display("i=block/routing,magenta;p=35,209");
         }
-        MMPP: MMPPGenerator {
+        mm3: MMPPGenerator {
             parameters:
-                @display("i=block/routing,magenta;p=307,200;is=vl");
+                @display("i=block/routing,magenta;p=35,72");
         }
 
         rec: Receiver {
             parameters:
-                @display("i=,gold;p=307,63");
+                @display("i=,gold;p=528,487");
         }
         rec1: Receiver {
             parameters:
-                @display("i=,gold;p=432,52");
+                @display("i=,gold;p=528,333");
         }
         rec2: Receiver {
             parameters:
-                @display("i=,gold;p=288,395");
+                @display("i=,gold;p=528,191");
         }
         rec3: Receiver {
             parameters:
-                @display("i=,gold;p=442,402");
+                @display("i=,gold;p=528,51");
         }
 
 
-        lb: LeakyBucket1 {
-            @display("p=76,32");
+        leakyBucket: LeakyBucket {
+            @display("p=246,487");
         }
-        jc: JitterControl1 {
-            @display("p=676,52");
+        jitterControl: JitterControl {
+            @display("p=246,333");
         }
-        tb: TokenBucket1 {
-            @display("p=57,410");
+        tokenBucket: TokenBucket {
+            @display("p=246,191");
         }
-        ls: LoadShedding1 {
-            @display("p=685,410");
+        loadShedding: LoadShedding {
+            @display("p=246,51");
         }
 
 
     connections:
 
-        expo.out --> lb.in++;
-        pss.out --> lb.in++;
-        on.out --> lb.in++;
-        mm.out --> lb.in++;
-        lb.out --> rec.in;
+        expo.out --> leakyBucket.in++;
+        pss.out --> leakyBucket.in++;
+        on.out --> leakyBucket.in++;
+        mm.out --> leakyBucket.in++;
+        leakyBucket.out --> rec.in;
 
-        expo1.out --> jc.in++;
-        pss1.out --> jc.in++;
-        on1.out --> jc.in++;
-        mm1.out --> jc.in++;
-        jc.out --> rec1.in;
+        expo1.out --> jitterControl.in++;
+        pss1.out --> jitterControl.in++;
+        on1.out --> jitterControl.in++;
+        mm1.out --> jitterControl.in++;
+        jitterControl.out --> rec1.in;
 
-        expo2.out --> tb.in++;
-        pss2.out --> tb.in++;
-        on2.out --> tb.in++;
-        mm2.out --> tb.in++;
-        tb.out --> rec2.in;
+        expo2.out --> tokenBucket.in++;
+        pss2.out --> tokenBucket.in++;
+        on2.out --> tokenBucket.in++;
+        mm2.out --> tokenBucket.in++;
+        tokenBucket.out --> rec2.in;
 
-        EXPONENTIAL.out --> ls.in++;
-        POISSON.out --> ls.in++;
-        ON_OFF.out --> ls.in++;
-       MMPP.out --> ls.in++;
-        ls.out --> rec3.in;
+        expo3.out --> loadShedding.in++;
+        pss3.out --> loadShedding.in++;
+        on3.out --> loadShedding.in++;
+        mm3.out --> loadShedding.in++;
+        loadShedding.out --> rec3.in;
 
 
 }
