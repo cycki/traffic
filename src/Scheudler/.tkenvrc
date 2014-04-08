@@ -1,2 +1,3 @@
 # Partial Tkenv config file -- see $HOME/.tkenvrc as well
+inspector "SchedulerTest.WWR" "WRRScheduler" "3" "566x330+676+158:normal"
 
