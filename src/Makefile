@@ -60,6 +60,7 @@ OBJS = \
     $O/Scheudler/PriorityScheduler.o \
     $O/Scheudler/RRScheduler.o \
     $O/Scheudler/SJFScheduler.o \
+    $O/Scheudler/WRRScheduler.o \
     $O/NetPacket/NetPacket_m.o
 
 # Message files
@@ -236,4 +237,8 @@ $O/Scheudler/SJFScheduler.o: Scheudler/SJFScheduler.cc \
 	NetPacket/NetPacket_m.h \
 	Scheudler/AbstractScheduler.h \
 	Scheudler/SJFScheduler.h
+$O/Scheudler/WRRScheduler.o: Scheudler/WRRScheduler.cc \
+	NetPacket/NetPacket_m.h \
+	Scheudler/AbstractScheduler.h \
+	Scheudler/WRRScheduler.h
 

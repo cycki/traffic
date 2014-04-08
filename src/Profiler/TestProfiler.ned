@@ -47,7 +47,7 @@ simple Receiver
 
 network Profil
 {
-    @display("bgb=770,453");
+    @display("bgb=770,596");
     submodules:
 
         pss: PoissonGenerator {
@@ -62,6 +62,10 @@ network Profil
             parameters:
                 @display("i=block/routing,cyan;p=77,45");
         }
+        pss3: PoissonGenerator {
+            parameters:
+                @display("i=block/routing,cyan;p=77,460");
+        }
         expo: ExponentialGenerator {
             parameters:
                 @display("i=block/routing,red;p=38,338");
@@ -73,6 +77,10 @@ network Profil
         expo2: ExponentialGenerator {
             parameters:
                 @display("i=block/routing,red;p=38,45");
+        }
+        expo3: ExponentialGenerator {
+            parameters:
+                @display("i=block/routing,red;p=38,460");
         }
         on: OnOffGenerator {
             parameters:
@@ -86,6 +94,10 @@ network Profil
             parameters:
                 @display("i=block/routing,green;p=77,84");
         }
+        on3: OnOffGenerator {
+            parameters:
+                @display("i=block/routing,green;p=77,499");
+        }
         mm: MMPPGenerator {
             parameters:
                 @display("i=block/routing,magenta;p=38,377");
@@ -97,6 +109,10 @@ network Profil
         mm2: MMPPGenerator {
             parameters:
                 @display("i=block/routing,magenta;p=38,84");
+        }
+        mm3: MMPPGenerator {
+            parameters:
+                @display("i=block/routing,magenta;p=38,501");
         }
         rec: Receiver {
             parameters:
@@ -110,16 +126,30 @@ network Profil
             parameters:
                 @display("i=,gold;p=531,66");
         }
+        rec3: Receiver {
+            parameters:
+                @display("i=,gold;p=531,485");
+        }
         leakyBucket: LeakyBucket {
-            @display("p=249,362");
+            parameters:
+                @display("p=249,362");
         }
         jitterControl: JitterControl {
-            @display("p=249,208");
+            parameters:
+                @display("p=249,208");
         }
         tokenBucket: TokenBucket {
-            @display("p=249,66");
+            parameters:
+                @display("p=249,66");
         }
-
+        leakyBucket1: LeakyBucket {
+            parameters:
+                @display("p=249,485");
+        }
+        leakyBucket2: LeakyBucket {
+            parameters:
+                @display("p=394,485");
+        }
 
     connections:
 
@@ -140,6 +170,14 @@ network Profil
         on2.out --> tokenBucket.in++;
         mm2.out --> tokenBucket.in++;
         tokenBucket.out --> rec2.in;
+
+        expo3.out --> leakyBucket1.in++;
+        pss3.out --> leakyBucket1.in++;
+        on3.out --> leakyBucket1.in++;
+        mm3.out --> leakyBucket1.in++;
+        leakyBucket1.out --> leakyBucket2.in++;
+        leakyBucket2.out --> rec3.in;
+
 
 
 }
