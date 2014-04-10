@@ -34,7 +34,7 @@ void doUnpacking(cCommBuffer *, T& t) {
 
 Register_Class(NetPacket);
 
-NetPacket::NetPacket(const char *name, int kind) : cPacket(name,kind)
+NetPacket::NetPacket(const char *name, int kind) : ::cPacket(name,kind)
 {
     this->src_var = -1;
     this->dst_var = -1;
@@ -45,7 +45,7 @@ NetPacket::NetPacket(const char *name, int kind) : cPacket(name,kind)
     this->endTime_var = 0;
 }
 
-NetPacket::NetPacket(const NetPacket& other) : cPacket(other)
+NetPacket::NetPacket(const NetPacket& other) : ::cPacket(other)
 {
     copy(other);
 }
@@ -57,7 +57,7 @@ NetPacket::~NetPacket()
 NetPacket& NetPacket::operator=(const NetPacket& other)
 {
     if (this==&other) return *this;
-    cPacket::operator=(other);
+    ::cPacket::operator=(other);
     copy(other);
     return *this;
 }
@@ -75,7 +75,7 @@ void NetPacket::copy(const NetPacket& other)
 
 void NetPacket::parsimPack(cCommBuffer *b)
 {
-    cPacket::parsimPack(b);
+    ::cPacket::parsimPack(b);
     doPacking(b,this->src_var);
     doPacking(b,this->dst_var);
     doPacking(b,this->sessionId_var);
@@ -87,7 +87,7 @@ void NetPacket::parsimPack(cCommBuffer *b)
 
 void NetPacket::parsimUnpack(cCommBuffer *b)
 {
-    cPacket::parsimUnpack(b);
+    ::cPacket::parsimUnpack(b);
     doUnpacking(b,this->src_var);
     doUnpacking(b,this->dst_var);
     doUnpacking(b,this->sessionId_var);

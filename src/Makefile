@@ -42,6 +42,7 @@ OBJS = \
     $O/AdmissionControl/AbstractAdmissionControl.o \
     $O/AdmissionControl/MAvgAdmissionControl.o \
     $O/AdmissionControl/PriorityAdmissionControl.o \
+    $O/AdmissionControl/RedAdmissionCotrol.o \
     $O/AdmissionControl/SessionAdmissionControl.o \
     $O/AdmissionControl/SourceAdmissionControl.o \
     $O/Generator/AbstractGenerator.o \
@@ -167,6 +168,10 @@ $O/AdmissionControl/MAvgAdmissionControl.o: AdmissionControl/MAvgAdmissionContro
 $O/AdmissionControl/PriorityAdmissionControl.o: AdmissionControl/PriorityAdmissionControl.cc \
 	AdmissionControl/AbstractAdmissionControl.h \
 	AdmissionControl/PriorityAdmissionControl.h \
+	NetPacket/NetPacket_m.h
+$O/AdmissionControl/RedAdmissionCotrol.o: AdmissionControl/RedAdmissionCotrol.cc \
+	AdmissionControl/AbstractAdmissionControl.h \
+	AdmissionControl/RedAdmissionCotrol.h \
 	NetPacket/NetPacket_m.h
 $O/AdmissionControl/SessionAdmissionControl.o: AdmissionControl/SessionAdmissionControl.cc \
 	AdmissionControl/AbstractAdmissionControl.h \
