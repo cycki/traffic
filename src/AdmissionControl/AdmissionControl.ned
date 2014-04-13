@@ -15,7 +15,7 @@ simple AdmissionControl
         @statistic[bandwidthStat](title="przepustowosc";source="bandwidth";record=vector; interpolationmode="none";);
 //        @signal[timeRequest](type = "double");
 //        @statistic[timeRequestStat](title="Requests in time";record=histogram; source="timeRequest";interpolationmode="none";);
-        volatile double processDelay @unit("s") = default(0s);
+        volatile double processDelay @unit("s") = default(1s);
         
         @display("i=device/firewall");
         

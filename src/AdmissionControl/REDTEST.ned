@@ -14,10 +14,10 @@ network REDTEST
 
         rec: ReceiverA {
             parameters:
-                @display("i=,gold;p=486,240");
+                @display("i=,gold;p=408,256");
         }
         redJestSpoko: REDAdmissionControl {
-            @display("p=338,239");
+            @display("p=229,255");
         }
 
 
