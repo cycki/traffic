@@ -4,8 +4,8 @@
 #include "AbstractProfiler.h"
 
 class LeakyBucket: public AbstractProfiler {
-	int32_t MAKSYMALNE_CIEKNIECIE;
-	int32_t ileMozeWyciec;
+	int32_t BUCKET_CAPACITY;
+	int32_t currentMaxLeak;
 	simtime_t lastFlowIncrement;
 	NetPacket* lastDelayedPacket;
 

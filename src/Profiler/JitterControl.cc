@@ -2,8 +2,7 @@
 
 Define_Module(JitterControl)
 
-void JitterControl::initialize()
-{
+void JitterControl::initialize() {
 	AbstractProfiler::initialize();
 	packetDelaySignal = registerSignal("AveragePacketDelay");
 	expectedPacketDelay = par("expectedPacketDelay");
@@ -16,11 +15,9 @@ void JitterControl::initialize()
 }
 
 // Kontrola nad odchyleniami czasowymi
-bool JitterControl::acceptPacket(NetPacket* packet, simtime_t& delay)
-{
+bool JitterControl::acceptPacket(NetPacket* packet, simtime_t& delay) {
 	// Jeśli to ostatni przytrzymany pakiet to
-	if(packet == lastQueuedPacket)
-	{
+	if(packet == lastQueuedPacket) {
 		// Uaktualnij sumę opóźnień
 		delay = simTime() - lastPacketSendTime;
 		packetDelaySum += delay;
@@ -31,9 +28,7 @@ bool JitterControl::acceptPacket(NetPacket* packet, simtime_t& delay)
 		emit(packetDelaySignal, currentPacketDelay);
 
 		return true;
-	}
-	else
-	{
+	} else {
 		packetsReceived++;
 
 		simtime_t diff = simTime() - lastPacketSendTime;

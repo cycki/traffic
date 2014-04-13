@@ -30,32 +30,32 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
             delete bandwidthEvent;
         }
     } else {
-        NetPacket* pck = check_and_cast<NetPacket*>(msg);
+        NetPacket* packet = check_and_cast<NetPacket*>(msg);
 		
 		// Pakiet pojawil sie na wejsciu
-        if (!pck->isSelfMessage()) {
-            inputBandwidthSum += pck->getByteLength();
+        if (!packet->isSelfMessage()) {
+            inputBandwidthSum += packet->getByteLength();
             if (canReceive()) {//jezeli jest miejsce - zakolejkowanie pakietu
                 if (queue.empty()) {
                     simtime_t processDelay = par("processDelay");
-                    scheduleAt(simTime() + processDelay, pck);//wyslanie komunikatu do siebie o zdarzeniu
+                    scheduleAt(simTime() + processDelay, packet);//wyslanie komunikatu do siebie o zdarzeniu
                 }
-                queue.push_back(pck);
+                queue.push_back(packet);
             } else {
-                EV << "Packet " << pck->getName() << " discarded.\n";
-                delete pck;
+                EV << "Packet " << packet->getName() << " discarded.\n";
+                delete packet;
             }
         } else {//Obsluga zdarzenia wlasnego
             simtime_t delay;
-            if (acceptPacket(pck, delay)) {//Akceptowanie pakietu zalezne od zastosowanego algorytmu,
+            if (acceptPacket(packet, delay)) {//Akceptowanie pakietu zalezne od zastosowanego algorytmu,
                 queue.pop_front();//usuwamy zaakceptowany do wyjcia pakiet z kolejki oczekujacych
-                send(pck, "out");//wysylamy go na wyjscie
-                outputBandwidthSum += pck->getByteLength(); //aktualizacja statystyk
-                if (!queue.empty()) {//jezeli s¹ jeszcze elementy w kolejce ustawiamy zdarzenie do wyslanie pierwszego z kolejki
+                send(packet, "out");//wysylamy go na wyjscie
+                outputBandwidthSum += packet->getByteLength(); //aktualizacja statystyk
+                if (!queue.empty()) {//jezeli sï¿½ jeszcze elementy w kolejce ustawiamy zdarzenie do wyslanie pierwszego z kolejki
                     scheduleAt(simTime(), queue.front());
                 }
             } else {//jezeli algorytm ksztaltujacy nie pozwolil na wyslanie pakietu
-                scheduleAt(simTime() + delay, pck);//ustawiamy zdarze z obliczonym opoznieniem
+                scheduleAt(simTime() + delay, packet);//ustawiamy zdarze z obliczonym opoznieniem
             }
         }
     }

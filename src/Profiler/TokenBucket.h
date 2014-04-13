@@ -6,7 +6,7 @@ class TokenBucket : public AbstractProfiler
 {
 protected:
 	int32_t tokens;
-	int32_t tokensMax;
+	int32_t BUCKET_CAPACITY;
 	int32_t tokenIncrement;
 	simtime_t lastTokenIncrement;
 	NetPacket* lastDelayedPacket;
