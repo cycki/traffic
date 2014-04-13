@@ -24,8 +24,8 @@ void REDAdmissionControl::initialize() {
     packetDropingProbability = par("packetDropingProbability");
     currentAvgQueueLength = 0;
     currentQueueLengthCount = 0;
-    intervalEvent = new cMessage("intervalEvent");
     timeForNextPacketSending = new cMessage("timeForNextPacketSending");
+    scheduleAt(simTime(), timeForNextPacketSending);
 }
 
 void REDAdmissionControl::handleMessage(cMessage* msg) {
@@ -34,34 +34,31 @@ void REDAdmissionControl::handleMessage(cMessage* msg) {
         bandwidth = 0;
         scheduleAt(simTime() + 1, emitBandwidth);
     } else {
-        if (msg == intervalEvent) {
-            scheduleAt(simTime() + tick, intervalEvent);
-        } else {
-            if (!msg->isSelfMessage()) { //jezeli pakiecik z wejcia
+        if (!msg->isSelfMessage()) { //jezeli pakiecik z wejcia
 
-                NetPacket* packet = check_and_cast<NetPacket*>(msg);
-                if (acceptMsg(packet)) {
-                    packetQueue.push_back(packet);
-                    EV << "Packet: "<< packet->getName() << " added";
-                } else {
-                    EV << "Packet: " << packet->getName() << " discarded"
-                              << endl;
-                    delete msg;
-                }
-            } else {//jeze
-                if(packetQueue.size()>0){
-                    EV << msg->getName() << " przyszlo, kolejka: "
-                              << packetQueue.size() << endl;
-                    NetPacket* msgToSend = packetQueue.front();
-                    EV << msgToSend->getName() << " gotowe do wyslanie" <<endl;
-                    //
-                    packetQueue.pop_front();
-                    send(msgToSend,"out");
-                }
-
-
-                scheduleAt(simTime() + 1, timeForNextPacketSending);
+            NetPacket* packet = check_and_cast<NetPacket*>(msg);
+            if (acceptMsg(packet)) {
+                packetQueue.push_back(packet);
+                //troche statystyk
+                emit(intervalSignal, simTime().dbl() - prevTime);
+                timeRequestHistogram.collect(simTime());
+                prevTime = simTime().dbl();
+                emit(delaySignal, simTime() - packet->getArrivalTime());
+                bandwidth += packet->getByteLength();
+                acceptedCount++;
+            } else {
+                emit(rejectedSignal, 1);
+                rejectedCount++;
+                delete msg;
             }
+        } else {
+            if (packetQueue.size() > 0) {
+                NetPacket* msgToSend = packetQueue.front();
+                packetQueue.pop_front();
+                send(msgToSend, "out");
+            }
+            if(!timeForNextPacketSending->isScheduled())
+                scheduleAt(simTime() + tick, timeForNextPacketSending);
         }
 
     }
@@ -70,27 +67,15 @@ void REDAdmissionControl::handleMessage(cMessage* msg) {
 bool REDAdmissionControl::acceptMsg(NetPacket* msg) {
     calculateAvgQueueLength();
     if (currentAvgQueueLength < thresholdMin) {
-        EV << "Puszczam! CurrentAVG: " << currentAvgQueueLength
-                  << ", currentLength: " << currentQueueLengthCount << endl;
         return true;
     } else {
         if (currentAvgQueueLength > thresholdMax) {
-
-            EV << "Stop! CurrentAVG: " << currentAvgQueueLength
-                      << ", currentLength: " << currentQueueLengthCount << endl;
             return false;
         } else {
             if (calculatePacketDropingProbability()
                     < packetDropingProbability) {
-
-                EV << "STOp srodnie! CurrentAVG: " << currentAvgQueueLength
-                          << ", currentLength: " << currentQueueLengthCount
-                          << endl;
                 return false;
             } else {
-                EV << "Puszczam srednio! CurrentAVG: " << currentAvgQueueLength
-                          << ", currentLength: " << currentQueueLengthCount
-                          << endl;
                 return true;
             }
         }

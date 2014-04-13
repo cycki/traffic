@@ -2,7 +2,6 @@
 #include "AbstractAdmissionControl.h"
 
 void AbstractAdmissionControl::initialize() {
-    cMessage* msg = new cMessage("intervalEvent");
     emitBandwidth = new cMessage("emitBandwith");
     delaySignal = registerSignal("delay");
     rejectedSignal = registerSignal("rejected");
@@ -13,8 +12,7 @@ void AbstractAdmissionControl::initialize() {
     prevTime = 0;
     bandwidth = 0;
     rejectedCount = acceptedCount = 0;
-    tick = 5;
-    scheduleAt(simTime(), msg);
+    tick = par("processDelay");
     scheduleAt(simTime() + 1, emitBandwidth);
 }
 
@@ -24,12 +22,6 @@ void AbstractAdmissionControl::handleMessage(cMessage* msg) {
         bandwidth = 0;
         scheduleAt(simTime() + 1, emitBandwidth);
     } else {
-        if (msg->isSelfMessage())
-        {
-            delete msg;
-            cMessage* msg2 = new cMessage("intervalEvent");
-            scheduleAt(simTime() + tick, msg2);
-        } else {
             NetPacket* packet = check_and_cast<NetPacket*>(msg);
             if (acceptMsg(packet)) {
                 emit(intervalSignal, simTime().dbl() - prevTime);
@@ -44,7 +36,6 @@ void AbstractAdmissionControl::handleMessage(cMessage* msg) {
                 rejectedCount++;
                 delete packet;
             }
-        }
     }
 }
 
