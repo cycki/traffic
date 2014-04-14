@@ -1,11 +1,11 @@
 package pakietowiec.AdmissionControl;
 
 import pakietowiec.Generator.AbstractGenerator;
-
 simple ExponentialGeneratorA extends AbstractGenerator
 {
     parameters:
         double mean @unit("s") = default(1s);
+        @display("is=s");
         @class(ExponentialGenerator);
 }
 
@@ -13,6 +13,7 @@ simple PoissonGeneratorA extends AbstractGenerator
 {
     parameters:
         double lambda = default(10);
+        @display("is=s");
         @class(PoissonGenerator);
 }
 simple OnOffGeneratorA extends AbstractGenerator
@@ -22,6 +23,7 @@ simple OnOffGeneratorA extends AbstractGenerator
         double scale = default(2.0);
         double shift = default(2.0);
 
+        @display("is=s");
         @class(OnOffGenerator);
 }
 simple MMPPGeneratorA extends AbstractGenerator
@@ -31,13 +33,14 @@ simple MMPPGeneratorA extends AbstractGenerator
         int maxPack = default(10);
         string transP = default("");
         string poissonLambdaP = default("");
+        @display("is=s");
         @class(MMPPGenerator);
 }
 simple SourceAdmissionControlA extends AdmissionControl
 {
     parameters:
 
-      
+
         string BlockedSources = default("");
         @class(SourceAdmissionControl);
 }
@@ -81,100 +84,122 @@ network AdmissionControlNetwork
     submodules:
         pss: PoissonGeneratorA {
             parameters:
-                @display("i=block/routing,cyan;p=508,231;is=l");
+                @display("i=block/routing,cyan;p=24,25");
         }
         expo: ExponentialGeneratorA {
             parameters:
-                @display("i=block/routing,red;p=191,240;is=l");
+                @display("i=block/routing,red;p=47,25");
         }
         on: OnOffGeneratorA {
             parameters:
-                @display("i=block/routing,green;p=290,240;is=l");
+                @display("i=block/routing,green;p=47,48");
         }
         mm: MMPPGeneratorA {
             parameters:
-                @display("i=block/routing,magenta;p=389,240;is=l");
+                @display("i=block/routing,magenta;p=24,48");
         }
         rec: ReceiverA {
             parameters:
-                @display("i=,gold;p=40,66");
+                @display("i=,gold;p=584,41");
         }
         admission_based_on_source: SourceAdmissionControlA {
-            @display("p=191,53");
+            @display("p=328,40");
         }
 
         pss1: PoissonGeneratorA {
             parameters:
-                @display("i=block/routing,cyan;p=494,240;is=l");
+                @display("i=block/routing,cyan;p=24,106");
         }
         expo1: ExponentialGeneratorA {
             parameters:
-                @display("i=block/routing,red;p=191,240;is=l");
+                @display("i=block/routing,red;p=47,106");
         }
         on1: OnOffGeneratorA {
             parameters:
-                @display("i=block/routing,green;p=290,240;is=l");
+                @display("i=block/routing,green;p=47,129");
         }
         mm1: MMPPGeneratorA {
             parameters:
-                @display("i=block/routing,magenta;p=389,240;is=l");
+                @display("i=block/routing,magenta;p=24,129");
         }
         rec1: ReceiverA {
             parameters:
-                @display("i=,gold;p=29,383");
+                @display("i=,gold;p=584,122");
         }
         admission_based_on_priority: PriorityAdmissionControlA {
-            @display("p=191,390");
+            @display("p=328,121");
         }
 
         pss2: PoissonGeneratorA {
             parameters:
-                @display("i=block/routing,cyan;p=494,240;is=l");
+                @display("i=block/routing,cyan;p=24,185");
         }
         expo2: ExponentialGeneratorA {
             parameters:
-                @display("i=block/routing,red;p=191,240");
+                @display("i=block/routing,red;p=47,185");
         }
         on2: OnOffGeneratorA {
             parameters:
-                @display("i=block/routing,green;p=290,240");
+                @display("i=block/routing,green;p=47,208");
         }
         mm2: MMPPGeneratorA {
             parameters:
-                @display("i=block/routing,magenta;p=389,240;is=l");
+                @display("i=block/routing,magenta;p=24,208");
         }
         rec2: ReceiverA {
             parameters:
-                @display("i=,gold;p=670,382");
+                @display("i=,gold;p=584,201");
         }
         admission_based_on_session: SessionAdmissionControlA {
-            @display("p=463,382");
+            @display("p=328,200");
         }
-
-        POISSON: PoissonGeneratorA {
+        pss4: PoissonGeneratorA {
             parameters:
-                @display("i=block/routing,cyan;p=508,240;is=vl");
+                @display("i=block/routing,cyan;p=24,351");
         }
-        EXPONENTIAL: ExponentialGeneratorA {
+        expo4: ExponentialGeneratorA {
             parameters:
-                @display("i=block/routing,red;p=184,240;is=vl");
+                @display("i=block/routing,red;p=47,351");
         }
-       ON_OFF: OnOffGeneratorA {
+        on4: OnOffGeneratorA {
             parameters:
-                @display("i=block/routing,green;p=290,240;is=vl");
+                @display("i=block/routing,green;p=47,374");
         }
-        MMPP: MMPPGeneratorA {
+        mm4: MMPPGeneratorA {
             parameters:
-                @display("i=block/routing,magenta;p=395,240;is=vl");
+                @display("i=block/routing,magenta;p=24,374");
+        }
+        rec4: ReceiverA {
+            parameters:
+                @display("i=,gold;p=584,367");
+        }
+        pss3: PoissonGeneratorA {
+            parameters:
+                @display("i=block/routing,cyan;p=24,279");
+        }
+        expo3: ExponentialGeneratorA {
+            parameters:
+                @display("i=block/routing,red;p=47,279");
+        }
+        on3: OnOffGeneratorA {
+            parameters:
+                @display("i=block/routing,green;p=47,302");
+        }
+        mm3: MMPPGeneratorA {
+            parameters:
+                @display("i=block/routing,magenta;p=24,302");
         }
         rec3: ReceiverA {
             parameters:
-                @display("i=,gold;p=647,66");
+                @display("i=,gold;p=584,295");
         }
         admission_based_on_avg: MAvgAdmissionControlA {
-            @display("p=447,65");
+            @display("p=328,294");
         }
 
+        admission_red: REDAdmissionControl {
+            @display("p=328,366");
+        }
     connections:
         expo.out --> admission_based_on_source.in++;
         pss.out --> admission_based_on_source.in++;
@@ -194,11 +219,16 @@ network AdmissionControlNetwork
         mm2.out --> admission_based_on_session.in++;
         admission_based_on_session.out --> rec2.in;
 
-        EXPONENTIAL.out --> admission_based_on_avg.in++;
-        POISSON.out --> admission_based_on_avg.in++;
-        ON_OFF.out --> admission_based_on_avg.in++;
-        MMPP.out --> admission_based_on_avg.in++;
+        expo3.out --> admission_based_on_avg.in++;
+        pss3.out --> admission_based_on_avg.in++;
+        on3.out --> admission_based_on_avg.in++;
+        mm3.out --> admission_based_on_avg.in++;
         admission_based_on_avg.out --> rec3.in;
 
 
+        admission_red.out --> rec4.in;
+        pss4.out --> admission_red.in++;
+        expo4.out --> admission_red.in++;
+        mm4.out --> admission_red.in++;
+        on4.out --> admission_red.in++;
 }

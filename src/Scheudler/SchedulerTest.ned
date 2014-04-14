@@ -23,20 +23,20 @@ network SchedulerTest
     submodules:
 
         LIFO: LIFO {
-            @display("is=vl;p=366,199");
+            @display("p=366,199");
         }
         FIFO: FIFO {
-            @display("is=vl;p=366,80");
+            @display("p=366,80");
         }
 
         RoundRobin: RRScheduler {
-            @display("is=vl;p=366,327");
+            @display("p=366,327");
         }
         PriorityScheduler: PriorityScheduler {
-            @display("is=vl;p=366,466");
+            @display("p=366,466");
         }
         SJFScheduler: SJFScheduler {
-            @display("is=vl;p=366,607");
+            @display("p=366,607");
         }
         WWR: WRRScheduler {
 
@@ -133,12 +133,12 @@ network SchedulerTest
         gen5[4].out --> SJFScheduler.in++;
         gen5[5].out --> SJFScheduler.in++;
 
-		gen6[0].out --> WWR.in++;
-		gen6[1].out --> WWR.in++;
-		gen6[2].out --> WWR.in++;
-		gen6[3].out --> WWR.in++;
-		gen6[4].out --> WWR.in++;
-		gen6[5].out --> WWR.in++;
+        gen6[0].out --> WWR.in++;
+        gen6[1].out --> WWR.in++;
+        gen6[2].out --> WWR.in++;
+        gen6[3].out --> WWR.in++;
+        gen6[4].out --> WWR.in++;
+        gen6[5].out --> WWR.in++;
 
 
         LIFO.out --> rec1.in;
