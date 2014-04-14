@@ -28,6 +28,7 @@ protected:
 	virtual void handleMessage(cMessage* msg);
 	bool canReceive();
 	virtual bool acceptPacket(NetPacket* packet, simtime_t& delay) = 0;
+	void initializeStatistics();
 };
 
 #endif /* ABSTRACTPROFILER_H_ */

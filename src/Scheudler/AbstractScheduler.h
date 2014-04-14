@@ -21,11 +21,16 @@ protected:
     cMessage* processEvent;
 
 	virtual void initialize();
-	virtual void handleMessage(cMessage* msg);
-	virtual bool receivePacket(NetPacket* packet, int gateNum) = 0;
+	virtual void handleMessage(cMessage* );
+	virtual bool receivePacket(NetPacket* , int ) = 0;
 	virtual bool hasPacketsAwaitingDeparture() = 0;
 	virtual NetPacket* getPacketForDeparture() = 0;
 	virtual void finish();
+	void initializeStatistics();
+	void updateAcceptedStats(int64);
+	void updateRejectedStats();
+	void handleBandwidthMessage();
+	void updateSendedStats(simtime_t_cref);
 };
 
 #endif /* ABSTRACTSCHEDULER_H_ */
