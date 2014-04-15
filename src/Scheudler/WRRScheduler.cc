@@ -38,7 +38,8 @@ bool WRRScheduler::receivePacket(NetPacket* packet, int gateNum) {
 }
 
 bool WRRScheduler::canReceive(int gateNum) {
-    return awaitingPackets[gateNum % 6]->size() < (int) maxQueueSize
+    int intputGateSize =  gateSize("in");
+    return awaitingPackets[gateNum % intputGateSize]->size() < (int) maxQueueSize
             || !maxQueueSize;
 }
 
