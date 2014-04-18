@@ -23,8 +23,8 @@ bool PriorityAdmissionControl::acceptMsg(NetPacket *msg) {
     uint32_t currentPrior = msg->getPriority();
     uint32_t mx = this->max;
     uint32_t mn = this->min;
-    if (currentPrior <= mx) { //gorna granica
-        if (currentPrior >= mn) { //dolna granica
+    if (currentPrior < mx) { //gorna granica
+        if (currentPrior > mn) { //dolna granica
             return true;
         }
     }
