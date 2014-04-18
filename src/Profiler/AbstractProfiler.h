@@ -8,10 +8,12 @@
 class AbstractProfiler : public cSimpleModule
 {
 	cMessage* bandwidthEvent;
-	simsignal_t inputSignal;
-	simsignal_t outputSignal;
 	uint32_t inputBandwidthSum;
 	uint32_t outputBandwidthSum;
+    cLongHistogram inputQueueHistogram;
+    cLongHistogram outputQueueHistogram;
+    unsigned rejectedCount;
+    unsigned acceptedCount;
 
 	void calcMeanBandwidth();
 
@@ -29,6 +31,7 @@ protected:
 	bool canReceive();
 	virtual bool acceptPacket(NetPacket* packet, simtime_t& delay) = 0;
 	void initializeStatistics();
+    virtual void finish();
 };
 
 #endif /* ABSTRACTPROFILER_H_ */

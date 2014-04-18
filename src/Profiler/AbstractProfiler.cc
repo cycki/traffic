@@ -12,10 +12,8 @@ void AbstractProfiler::initializeStatistics() {
     outputBandwidthSum = 0;
     inputBandwidth = 0;
     outputBandwidth = 0;
-    inputSignal = registerSignal("Input");
-    outputSignal = registerSignal("Output");
-    emit(inputSignal, inputBandwidth);
-    emit(outputSignal, outputBandwidth);
+    rejectedCount = 0;
+    acceptedCount = 0;
     WATCH(inputBandwidth);
     WATCH(outputBandwidth);
     bandwidthEvent = new cMessage("bandwidthEvent");
@@ -40,12 +38,14 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
         if (!packet->isSelfMessage()) {
             inputBandwidthSum += packet->getByteLength();
             if (canReceive()) { //jezeli jest miejsce - zakolejkowanie pakietu
+                acceptedCount++;
                 if (queue.empty()) {
                     simtime_t processDelay = par("processDelay");
                     scheduleAt(simTime() + processDelay, packet); //wyslanie komunikatu do siebie o zdarzeniu
                 }
                 queue.push_back(packet);
             } else {
+                rejectedCount++;
                 delete packet;
             }
         } else { //Obsluga zdarzenia wlasnego
@@ -68,13 +68,19 @@ bool AbstractProfiler::canReceive() {
     return queue.size() < maxQueueSize || !maxQueueSize;
 }
 
+void AbstractProfiler::finish() {
+    recordScalar("Rejected count", rejectedCount);
+    recordScalar("Accepted count", acceptedCount);
+    outputQueueHistogram.recordAs("Profiler Output");
+    inputQueueHistogram.recordAs("Profiler Input");
+}
+
 void AbstractProfiler::calcMeanBandwidth() {
     inputBandwidth = inputBandwidthSum / bandwidthCalcTick.dbl();
     outputBandwidth = outputBandwidthSum / bandwidthCalcTick.dbl();
 
-    emit(inputSignal, inputBandwidth);
-    emit(outputSignal, outputBandwidth);
-
+    inputQueueHistogram.collect(inputBandwidth);
+    outputQueueHistogram.collect(outputBandwidth);
     inputBandwidthSum = 0;
     outputBandwidthSum = 0;
 }
