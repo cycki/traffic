@@ -4,6 +4,7 @@ Define_Module(WRRScheduler);
 void WRRScheduler::initialize() {
     AbstractScheduler::initialize();
     packetsToBeSendFromCurrentQueue = 0;
+    currentQueue = 0;
     maxQueueSize = par("maxQueueSize");
     const char* szWeights = par("weights");
     std::vector<double> vecWeights =
@@ -29,8 +30,9 @@ void WRRScheduler::initialize() {
 }
 
 bool WRRScheduler::receivePacket(NetPacket* packet, int gateNum) {
-    if (canReceive(gateNum % gateSize("in"))) {
-        awaitingPackets[gateNum % gateSize("in")]->addPacket(packet);
+    int gateNumber = gateNum % gateSize("in");
+    if (canReceive(gateNumber )) {
+        awaitingPackets[gateNumber]->addPacket(packet);
         return true;
     } else {
         return false;
@@ -38,8 +40,8 @@ bool WRRScheduler::receivePacket(NetPacket* packet, int gateNum) {
 }
 
 bool WRRScheduler::canReceive(int gateNum) {
-    int intputGateSize =  gateSize("in");
-    return awaitingPackets[gateNum % intputGateSize]->size() < (int) maxQueueSize
+    int gateNumber =  gateNum % gateSize("in");
+    return awaitingPackets[gateNumber]->size() < (int) maxQueueSize
             || !maxQueueSize;
 }
 
@@ -54,6 +56,7 @@ bool WRRScheduler::hasPacketsAwaitingDeparture() {
 
 NetPacket* WRRScheduler::getPacketForDeparture() {
     //jezeli jeszcze nie obsluzyles tej kolejki - wyslij z niej pakiet
+    int gateSizeNumber = gateSize("in");
     if (packetsToBeSendFromCurrentQueue > 0) {
         if (packetsToBeSendFromCurrentQueue
                 > awaitingPackets[currentQueue]->size()) {
@@ -62,12 +65,13 @@ NetPacket* WRRScheduler::getPacketForDeparture() {
                     awaitingPackets[currentQueue]->size();
         }
     } else { //zmien kolejke, ustaw ze mozesz wyslac nowa ilosc pakietow;
-        for (int i = 0; i < gateSize("in"); i++) {
+        for (int i = 0; i < gateSizeNumber; i++) {
             if (!awaitingPackets[currentQueue]->isEmpty()) {
                 break;
             }
-            currentQueue = (currentQueue + 1) % gateSize("in");
+            currentQueue = (currentQueue + 1) % gateSizeNumber;
         }
+
         packetsToBeSendFromCurrentQueue = std::min(
                 awaitingPackets[currentQueue]->packetsToBeServed,
                 awaitingPackets[currentQueue]->size());

@@ -31,6 +31,7 @@ void AbstractScheduler::handleMessage(cMessage* msg) {
             if (queued) {
                 updateAcceptedStats(pck->getByteLength());
                 if (!processEvent->isScheduled()) {
+                    pck->setTimestamp();
                     scheduleAt(simTime() + processDelay, processEvent);
                 }
             } else {
@@ -39,8 +40,8 @@ void AbstractScheduler::handleMessage(cMessage* msg) {
             }
         } else {
             NetPacket* pck = getPacketForDeparture();
+            updateSendedStats(pck->getTimestamp());
             send(pck, "out");
-            updateSendedStats(pck->getArrivalTime());
             if (hasPacketsAwaitingDeparture())
                 scheduleAt(simTime() + processDelay, processEvent);
         }
@@ -64,6 +65,7 @@ void AbstractScheduler::updateRejectedStats() {
 }
 void AbstractScheduler::updateSendedStats(simtime_t_cref arrivalTime){
     emit(delaySignal, simTime() - arrivalTime);
+    packetDelayHistogram.collect(simTime() - arrivalTime);
 }
 void AbstractScheduler::finish() {
     recordScalar("Rejected count", rejectedCount);

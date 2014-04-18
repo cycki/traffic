@@ -12,6 +12,7 @@ protected:
     simsignal_t bandwidthSignal;
     cMessage* emitBandwidth;
     cDoubleHistogram timeRequestHistogram;
+    cLongHistogram packetDelayHistogram;
 	double bandwidth;
     double prevTime;
     unsigned rejectedCount;
