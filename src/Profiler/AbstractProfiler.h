@@ -12,6 +12,7 @@ class AbstractProfiler : public cSimpleModule
 	uint32_t outputBandwidthSum;
     cLongHistogram inputQueueHistogram;
     cLongHistogram outputQueueHistogram;
+    cLongHistogram packetDelayHistogram;
     unsigned rejectedCount;
     unsigned acceptedCount;
 

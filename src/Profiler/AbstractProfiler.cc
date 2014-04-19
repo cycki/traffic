@@ -39,6 +39,7 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
             inputBandwidthSum += packet->getByteLength();
             if (canReceive()) { //jezeli jest miejsce - zakolejkowanie pakietu
                 acceptedCount++;
+                packet->setTimestamp();
                 if (queue.empty()) {
                     simtime_t processDelay = par("processDelay");
                     scheduleAt(simTime() + processDelay, packet); //wyslanie komunikatu do siebie o zdarzeniu
@@ -53,6 +54,7 @@ void AbstractProfiler::handleMessage(cMessage* msg) {
             if (acceptPacket(packet, delay)) { //Akceptowanie pakietu zalezne od zastosowanego algorytmu,
                 queue.pop_front(); //usuwamy zaakceptowany do wyjcia pakiet z kolejki oczekujacych
                 send(packet, "out"); //wysylamy go na wyjscie
+                packetDelayHistogram.collect(simTime() - packet->getTimestamp());
                 outputBandwidthSum += packet->getByteLength(); //aktualizacja statystyk
                 if (!queue.empty()) { //jezeli sa jeszcze elementy w kolejce ustawiamy zdarzenie do wyslanie pierwszego z kolejki
                     scheduleAt(simTime(), queue.front());
@@ -73,6 +75,7 @@ void AbstractProfiler::finish() {
     recordScalar("Accepted count", acceptedCount);
     outputQueueHistogram.recordAs("Profiler Output");
     inputQueueHistogram.recordAs("Profiler Input");
+    packetDelayHistogram.recordAs("Packet delay");
 }
 
 void AbstractProfiler::calcMeanBandwidth() {
