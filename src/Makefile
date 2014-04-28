@@ -1,12 +1,12 @@
 #
-# OMNeT++/OMNEST Makefile for traffic
+# OMNeT++/OMNEST Makefile for Pakietowiec
 #
 # This file was generated with the command:
 #  opp_makemake -f --deep
 #
 
 # Name of target to be created (-o option)
-TARGET = traffic$(EXE_SUFFIX)
+TARGET = Pakietowiec$(EXE_SUFFIX)
 
 # User interface (uncomment one) (-u option)
 USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
@@ -17,14 +17,11 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 INCLUDE_PATH = \
     -I. \
     -IAdmissionControl \
-    -IAdmissionControl/results \
     -IGenerator \
     -INetPacket \
     -IProfiler \
-    -IProfiler/results \
     -IReceiver \
-    -IScheudler \
-    -IScheudler/results
+    -IScheudler
 
 # Additional object and library files to link with
 EXTRA_OBJS =
@@ -138,24 +135,21 @@ msgheaders: $(MSGFILES:.msg=_m.h)
 clean:
 	$(qecho) Cleaning...
 	$(Q)-rm -rf $O
-	$(Q)-rm -f traffic traffic.exe libtraffic.so libtraffic.a libtraffic.dll libtraffic.dylib
+	$(Q)-rm -f Pakietowiec Pakietowiec.exe libPakietowiec.so libPakietowiec.a libPakietowiec.dll libPakietowiec.dylib
 	$(Q)-rm -f ./*_m.cc ./*_m.h
 	$(Q)-rm -f AdmissionControl/*_m.cc AdmissionControl/*_m.h
-	$(Q)-rm -f AdmissionControl/results/*_m.cc AdmissionControl/results/*_m.h
 	$(Q)-rm -f Generator/*_m.cc Generator/*_m.h
 	$(Q)-rm -f NetPacket/*_m.cc NetPacket/*_m.h
 	$(Q)-rm -f Profiler/*_m.cc Profiler/*_m.h
-	$(Q)-rm -f Profiler/results/*_m.cc Profiler/results/*_m.h
 	$(Q)-rm -f Receiver/*_m.cc Receiver/*_m.h
 	$(Q)-rm -f Scheudler/*_m.cc Scheudler/*_m.h
-	$(Q)-rm -f Scheudler/results/*_m.cc Scheudler/results/*_m.h
 
 cleanall: clean
 	$(Q)-rm -rf $(PROJECT_OUTPUT_DIR)
 
 depend:
 	$(qecho) Creating dependencies...
-	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc AdmissionControl/*.cc AdmissionControl/results/*.cc Generator/*.cc NetPacket/*.cc Profiler/*.cc Profiler/results/*.cc Receiver/*.cc Scheudler/*.cc Scheudler/results/*.cc
+	$(Q)$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc AdmissionControl/*.cc Generator/*.cc NetPacket/*.cc Profiler/*.cc Receiver/*.cc Scheudler/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 $O/AdmissionControl/AbstractAdmissionControl.o: AdmissionControl/AbstractAdmissionControl.cc \
