@@ -1,5 +1,4 @@
 #include "PriorityAdmissionControl.h"
-
 Define_Module(PriorityAdmissionControl)
 
 /*
