@@ -30,8 +30,9 @@ void AbstractScheduler::handleMessage(cMessage* msg) {
 
             if (queued) {
                 updateAcceptedStats(pck->getByteLength());
+                pck->setTimestamp();
                 if (!processEvent->isScheduled()) {
-                    pck->setTimestamp();
+                    EV << "Wejcie: "<< pck->getName() << " Timestamp "<< pck->getTimestamp() <<", Czas: " << simTime() << endl;
                     scheduleAt(simTime() + processDelay, processEvent);
                 }
             } else {
@@ -40,6 +41,8 @@ void AbstractScheduler::handleMessage(cMessage* msg) {
             }
         } else {
             NetPacket* pck = getPacketForDeparture();
+
+            EV << "Wyjscie: "<< pck->getName() << " Timestamp "<< pck->getTimestamp() <<", Czas: " << simTime() << endl;
             updateSendedStats(pck->getTimestamp());
             send(pck, "out");
             if (hasPacketsAwaitingDeparture())
