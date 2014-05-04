@@ -3,7 +3,7 @@ import pakietowiec.Generator.AbstractGenerator;
 import pakietowiec.AdmissionControl.REDAdmissionControl;
 import pakietowiec.Profiler.JitterControl;
 import pakietowiec.Scheudler.PriorityScheduler;
-simple ExponentialGeneratorB extends AbstractGenerator
+simple ExponentialGeneratorC extends AbstractGenerator
 {
     parameters:
         double mean @unit("s") = default(1s);
@@ -11,14 +11,14 @@ simple ExponentialGeneratorB extends AbstractGenerator
         @class(ExponentialGenerator);
 }
 
-simple PoissonGeneratorB extends AbstractGenerator
+simple PoissonGeneratorC extends AbstractGenerator
 {
     parameters:
         double lambda = default(10);
         @display("is=s");
         @class(PoissonGenerator);
 }
-simple OnOffGeneratorB extends AbstractGenerator
+simple OnOffGeneratorC extends AbstractGenerator
 {
     parameters:
         double shape = default(2.0);
@@ -28,7 +28,7 @@ simple OnOffGeneratorB extends AbstractGenerator
         @display("is=s");
         @class(OnOffGenerator);
 }
-simple MMPPGeneratorB extends AbstractGenerator
+simple MMPPGeneratorC extends AbstractGenerator
 {
     parameters:
         int quantState = default(3);
@@ -41,7 +41,7 @@ simple MMPPGeneratorB extends AbstractGenerator
 
 
 
-simple ReceiverB
+simple ReceiverC
 {
     parameters:
         @display("i=block/process");
@@ -54,23 +54,23 @@ network Simulations2
     @display("bgb=731,358");
     submodules:
 
-        pss2: PoissonGeneratorB {
+        pss2: PoissonGeneratorC {
             parameters:
                 @display("i=block/routing,cyan;p=24,185");
         }
-        expo2: ExponentialGeneratorB {
+        expo2: ExponentialGeneratorC {
             parameters:
                 @display("i=block/routing,red;p=47,185");
         }
-        on2: OnOffGeneratorB {
+        on2: OnOffGeneratorC {
             parameters:
                 @display("i=block/routing,green;p=47,208");
         }
-        mm2: MMPPGeneratorB {
+        mm2: MMPPGeneratorC {
             parameters:
                 @display("i=block/routing,magenta;p=24,208");
         }
-        rec2: ReceiverB {
+        rec2: ReceiverC {
             parameters:
                 @display("i=,gold;p=637,201");
         }
